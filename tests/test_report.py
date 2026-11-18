@@ -51,12 +51,21 @@ class TestReportContent(unittest.TestCase):
         self.assertIn("不作为诊断依据", self.text)
         self.assertIn("请医师结合临床确认", self.text)
 
+    def test_item_lines_show_item_max(self):
+        """分项得分行同时给出该条目满分，便于核对权重"""
+        self.assertIn("进食：10 / 10 分", self.text)
+        self.assertIn("洗澡：5 / 5 分", self.text)
+
     def test_default_subject_is_fake(self):
         text = render_report(demo_result())
         self.assertIn("演示数据", text)
 
     def test_time_is_rendered(self):
         self.assertIn("2026年10月21日", self.text)
+
+    def test_contains_generator_line(self):
+        """尾注需标明生成工具与版本，便于报告追溯"""
+        self.assertIn("生成工具：量表评估系统 v", self.text)
 
 
 class TestReportCompliance(unittest.TestCase):

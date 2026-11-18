@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
+from app import __version__
 from app.models import ScoreResult
 from app.scales import get_scale
 
@@ -50,12 +51,14 @@ def render_report(
     for index, item in enumerate(scale.items, start=1):
         score_value = result.item_scores.get(item.code)
         label = result.item_labels.get(item.code, "")
-        lines.append(f"  {index}. {item.label}：{score_value} 分（{label}）")
+        item_max = max(option.score for option in item.options)
+        lines.append(f"  {index}. {item.label}：{score_value} / {item_max} 分（{label}）")
     lines.extend(
         [
             "",
             "三、说明",
             COMPLIANCE_TAIL,
+            f"生成工具：量表评估系统 v{__version__}",
         ]
     )
     return "\n".join(lines)
